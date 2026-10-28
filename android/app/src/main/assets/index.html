@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#1B4332">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Forest - Stay Focused</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="confetti-container" class="confetti-container"></div>
+
+  <div id="app-container">
+    <!-- Top Bar -->
+    <header class="app-header">
+      <div class="brand-section">
+        <svg class="brand-logo-icon" viewBox="0 0 100 100">
+          <path d="M50,15 L78,65 L58,65 L84,90 L16,90 L42,65 L22,65 Z" fill="#52B788"/>
+          <path d="M50,15 L78,65 L50,65 L84,90 L50,90 Z" fill="#74C69D"/>
+        </svg>
+        <h1 class="brand-title">Forest</h1>
+      </div>
+
+      <div class="header-actions">
+        <div class="coin-badge" id="header-coin-badge">
+          <span class="coin-icon">🪙</span>
+          <span id="header-coins-val">60</span>
+        </div>
+        <button class="sound-toggle-btn" id="btn-sound-menu" title="Ambient Sound">🎧</button>
+        <button class="settings-btn" id="btn-settings" title="Settings">⚙️</button>
+      </div>
+    </header>
+
+    <!-- Views Container -->
+    <main class="views-container">
+      
+      <!-- VIEW 1: TIMER -->
+      <section id="view-timer" class="view active">
+        <div class="timer-view-content">
+          
+          <!-- Mode Switcher -->
+          <div class="mode-switch">
+            <button class="mode-btn active" id="mode-countdown">Timer Mode</button>
+            <button class="mode-btn" id="mode-stopwatch">Stopwatch</button>
+          </div>
+
+          <!-- Active Tree / Progress Ring -->
+          <div class="tree-display-container">
+            <svg class="progress-ring-svg" viewBox="0 0 300 300">
+              <defs>
+                <linearGradient id="timerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#52B788"/>
+                  <stop offset="50%" stop-color="#74C69D"/>
+                  <stop offset="100%" stop-color="#95D5B2"/>
+                </linearGradient>
+              </defs>
+              <circle class="progress-ring-bg" cx="150" cy="150" r="130"/>
+              <circle id="progress-ring-fill" class="progress-ring-fill" cx="150" cy="150" r="130"/>
+            </svg>
+
+            <!-- Center Tree Graphic -->
+            <div id="tree-art-box" class="tree-art-box"></div>
+          </div>
+
+          <!-- Countdown Display & Motivation -->
+          <div class="timer-info-box">
+            <div id="timer-countdown" class="timer-countdown">25:00</div>
+            <div id="motivational-quote" class="motivational-quote">Plant a tree to begin deep focus</div>
+          </div>
+
+          <!-- Tag & Category Selector -->
+          <div class="tag-selector-wrapper" id="tag-selector-btn">
+            <span id="current-tag-dot" class="current-tag-dot"></span>
+            <span id="current-tag-name" class="current-tag-name">📚 Study</span>
+            <span class="tag-dropdown-icon">▾</span>
+          </div>
+
+          <!-- Duration Quick Select Chips -->
+          <div class="duration-selector" id="duration-selector">
+            <button class="duration-chip" data-mins="15">15m</button>
+            <button class="duration-chip selected" data-mins="25">25m</button>
+            <button class="duration-chip" data-mins="45">45m</button>
+            <button class="duration-chip" data-mins="60">60m</button>
+            <button class="duration-chip" data-mins="90">90m</button>
+            <button class="duration-chip" data-mins="120">120m</button>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="action-buttons-group">
+            <button id="btn-plant" class="btn-plant">
+              <span>🌱</span> Plant Tree
+            </button>
+            <button id="btn-giveup" class="btn-giveup">
+              <span>🥀</span> Give Up
+            </button>
+          </div>
+
+          <!-- Species Quick Preview -->
+          <div class="active-species-pill">
+            <span>Planting:</span>
+            <span id="active-species-name" class="tree-name">Cedar Pine</span>
+            <span style="font-size:0.75rem; color:var(--text-muted)">Change ›</span>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- VIEW 2: FOREST GARDEN -->
+      <section id="view-forest" class="view">
+        <div class="forest-header-card">
+          <div class="forest-filter-bar">
+            <button class="filter-chip active" data-filter="all">All Time</button>
+            <button class="filter-chip" data-filter="today">Today</button>
+            <button class="filter-chip" data-filter="week">This Week</button>
+            <button class="filter-chip" data-filter="month">This Month</button>
+          </div>
+
+          <div class="forest-stats-strip">
+            <div class="stat-item healthy">
+              <div id="forest-stat-healthy" class="stat-val">0</div>
+              <div class="stat-lbl">Healthy 🌲</div>
+            </div>
+            <div class="stat-item withered">
+              <div id="forest-stat-withered" class="stat-val">0</div>
+              <div class="stat-lbl">Withered 🥀</div>
+            </div>
+            <div class="stat-item rate">
+              <div id="forest-stat-rate" class="stat-val">100%</div>
+              <div class="stat-lbl">Survival Rate</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Canvas / Grid -->
+        <div id="forest-grid-canvas" class="forest-grid-canvas"></div>
+      </section>
+
+      <!-- VIEW 3: NURSERY / SHOP -->
+      <section id="view-shop" class="view">
+        <div class="shop-banner">
+          <div class="shop-banner-info">
+            <h2>Tree Nursery</h2>
+            <p>Earn coins through focus sessions to unlock exotic trees</p>
+          </div>
+          <span style="font-size:2.4rem">🏡</span>
+        </div>
+
+        <div id="species-shop-grid" class="species-grid"></div>
+      </section>
+
+      <!-- VIEW 4: ANALYTICS & STATS -->
+      <section id="view-stats" class="view">
+        <div class="stats-overview-grid">
+          <div class="metric-card">
+            <div id="stat-total-time" class="metric-val">0h 0m</div>
+            <div class="metric-lbl">Total Focus</div>
+          </div>
+          <div class="metric-card">
+            <div id="stat-total-trees" class="metric-val">0</div>
+            <div class="metric-lbl">Trees Planted</div>
+          </div>
+          <div class="metric-card">
+            <div id="stat-survival-rate" class="metric-val">100%</div>
+            <div class="metric-lbl">Survival Rate</div>
+          </div>
+          <div class="metric-card">
+            <div id="stat-streak" class="metric-val">3 Days 🔥</div>
+            <div class="metric-lbl">Current Streak</div>
+          </div>
+        </div>
+
+        <!-- Weekly Focus Bar Chart -->
+        <div class="chart-card">
+          <div class="chart-card-title">
+            <span>Weekly Focus Activity</span>
+            <span style="font-size:0.8rem; color:var(--accent-mint)">Minutes</span>
+          </div>
+          <div id="weekly-chart-bars" class="bar-chart-container"></div>
+        </div>
+
+        <!-- Category Breakdown -->
+        <div class="chart-card">
+          <div class="chart-card-title">
+            <span>Focus By Tag</span>
+          </div>
+          <div id="tag-breakdown-container" class="tag-breakdown-list"></div>
+        </div>
+      </section>
+
+      <!-- VIEW 5: QUESTS -->
+      <section id="view-quests" class="view">
+        <div class="shop-banner">
+          <div class="shop-banner-info">
+            <h2>Daily Quests</h2>
+            <p>Complete challenges to earn bonus coin rewards</p>
+          </div>
+          <span style="font-size:2.4rem">🏆</span>
+        </div>
+
+        <div id="quests-list-container" class="quest-list"></div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav-bar">
+      <button class="nav-tab-btn active" data-tab="timer">
+        <span class="tab-icon">⏱️</span>
+        <span class="tab-label">Timer</span>
+      </button>
+      <button class="nav-tab-btn" data-tab="forest">
+        <span class="tab-icon">🌲</span>
+        <span class="tab-label">Forest</span>
+      </button>
+      <button class="nav-tab-btn" data-tab="shop">
+        <span class="tab-icon">🏪</span>
+        <span class="tab-label">Nursery</span>
+      </button>
+      <button class="nav-tab-btn" data-tab="stats">
+        <span class="tab-icon">📊</span>
+        <span class="tab-label">Analytics</span>
+      </button>
+      <button class="nav-tab-btn" data-tab="quests">
+        <span class="tab-icon">🏆</span>
+        <span class="tab-label">Quests</span>
+      </button>
+    </nav>
+
+    <!-- ==================== MODALS ==================== -->
+
+    <!-- Give Up Confirmation Modal -->
+    <div id="modal-giveup" class="modal-backdrop">
+      <div class="bottom-sheet">
+        <div class="sheet-drag-handle"></div>
+        <div class="dialog-center-content">
+          <div id="giveup-tree-preview" class="dialog-art-preview"></div>
+          <h3 class="sheet-title" style="color:var(--accent-danger)">Abandon Your Tree?</h3>
+          <p style="font-size:0.86rem; color:var(--text-secondary); margin-bottom:18px; line-height:1.4;">
+            If you give up now, your young tree will wither and perish. Its dry scarred trunk will stay in your forest as a reminder.
+          </p>
+          <div class="dialog-actions">
+            <button id="btn-cancel-giveup" class="dialog-btn-secondary">Keep Growing</button>
+            <button id="btn-confirm-giveup" class="dialog-btn-danger">Give Up</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Session Complete Celebration Modal -->
+    <div id="modal-complete" class="modal-backdrop">
+      <div class="bottom-sheet">
+        <div class="sheet-drag-handle"></div>
+        <div class="dialog-center-content">
+          <div id="complete-tree-preview" class="dialog-art-preview"></div>
+          <h3 id="complete-species-title" class="sheet-title" style="color:var(--accent-mint)">Focus Session Completed!</h3>
+          <p style="font-size:0.88rem; color:var(--text-secondary);">
+            Congratulations! You resisted distractions and planted a magnificent tree in your forest garden.
+          </p>
+          <div class="dialog-coins-earned">
+            <span>🪙</span>
+            <span id="complete-coins-amount">+15 Coins</span>
+          </div>
+          <button id="btn-finish-continue" class="dialog-btn-primary" style="width:100%">Visit Your Forest</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tag Picker Modal -->
+    <div id="modal-tags" class="modal-backdrop">
+      <div class="bottom-sheet">
+        <div class="sheet-drag-handle"></div>
+        <h3 class="sheet-title">Select Focus Tag</h3>
+        <div id="tags-picker-grid" class="tags-picker-grid"></div>
+      </div>
+    </div>
+
+    <!-- Ambient Sound Modal -->
+    <div id="modal-sound" class="modal-backdrop">
+      <div class="bottom-sheet">
+        <div class="sheet-drag-handle"></div>
+        <h3 class="sheet-title">Ambient Soundscapes</h3>
+        <div class="sound-picker-grid">
+          <div class="sound-picker-card active" data-sound="off">
+            <span style="font-size:1.3rem">🔇</span>
+            <div>
+              <div style="font-weight:700; font-size:0.88rem">Silent</div>
+              <div style="font-size:0.7rem; color:var(--text-muted)">No sound</div>
+            </div>
+          </div>
+          <div class="sound-picker-card" data-sound="rain">
+            <span style="font-size:1.3rem">🌧️</span>
+            <div>
+              <div style="font-weight:700; font-size:0.88rem">Gentle Rain</div>
+              <div style="font-size:0.7rem; color:var(--text-muted)">Soft drizzle</div>
+            </div>
+          </div>
+          <div class="sound-picker-card" data-sound="forest">
+            <span style="font-size:1.3rem">🌲</span>
+            <div>
+              <div style="font-weight:700; font-size:0.88rem">Forest Wind</div>
+              <div style="font-size:0.7rem; color:var(--text-muted)">Swaying pines</div>
+            </div>
+          </div>
+          <div class="sound-picker-card" data-sound="cafe">
+            <span style="font-size:1.3rem">☕</span>
+            <div>
+              <div style="font-weight:700; font-size:0.88rem">Cozy Café</div>
+              <div style="font-size:0.7rem; color:var(--text-muted)">Warm chatter</div>
+            </div>
+          </div>
+          <div class="sound-picker-card" data-sound="fire">
+            <span style="font-size:1.3rem">🔥</span>
+            <div>
+              <div style="font-weight:700; font-size:0.88rem">Campfire</div>
+              <div style="font-size:0.7rem; color:var(--text-muted)">Wood crackle</div>
+            </div>
+          </div>
+          <div class="sound-picker-card" data-sound="zen">
+            <span style="font-size:1.3rem">🧘</span>
+            <div>
+              <div style="font-weight:700; font-size:0.88rem">Zen Drone</div>
+              <div style="font-size:0.7rem; color:var(--text-muted)">432Hz harmony</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="volume-slider-box">
+          <span style="font-size:1.1rem">🔈</span>
+          <input type="range" id="ambient-volume-slider" class="volume-slider" min="0" max="1" step="0.05" value="0.5">
+          <span style="font-size:1.1rem">🔊</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tree Inspector Modal -->
+    <div id="modal-tree-inspect" class="modal-backdrop">
+      <div class="bottom-sheet">
+        <div class="sheet-drag-handle"></div>
+        <div class="dialog-center-content">
+          <div id="inspect-art-preview" class="dialog-art-preview"></div>
+          <h3 id="inspect-title" class="sheet-title">Cedar Pine 🌲</h3>
+          <div id="inspect-status" style="font-weight:700; font-size:0.95rem; margin-bottom:12px;"></div>
+          
+          <div style="background:var(--bg-tertiary); border-radius:var(--radius-md); padding:12px; margin-bottom:16px; text-align:left;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:0.85rem;">
+              <span style="color:var(--text-muted)">Focus Tag:</span>
+              <span id="inspect-tag" style="font-weight:600"></span>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:0.85rem;">
+              <span style="color:var(--text-muted)">Duration:</span>
+              <span id="inspect-duration" style="font-weight:600"></span>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:0.85rem;">
+              <span style="color:var(--text-muted)">Planted At:</span>
+              <span id="inspect-date" style="font-weight:600"></span>
+            </div>
+          </div>
+
+          <button id="btn-close-inspect" class="dialog-btn-primary" style="width:100%">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="modal-settings" class="modal-backdrop">
+      <div class="bottom-sheet">
+        <div class="sheet-drag-handle"></div>
+        <h3 class="sheet-title">App Settings</h3>
+
+        <div style="display:flex; flex-direction:column; gap:14px; margin-bottom:20px;">
+          <label style="display:flex; justify-content:space-between; align-items:center; font-size:0.92rem;">
+            <span>Sound Effects (Chimes & Fanfare)</span>
+            <input type="checkbox" id="toggle-sfx" checked style="accent-color:var(--accent-mint); width:18px; height:18px;">
+          </label>
+          <label style="display:flex; justify-content:space-between; align-items:center; font-size:0.92rem;">
+            <span>Haptic Touch Feedback</span>
+            <input type="checkbox" id="toggle-haptic" checked style="accent-color:var(--accent-mint); width:18px; height:18px;">
+          </label>
+          <label style="display:flex; justify-content:space-between; align-items:center; font-size:0.92rem;">
+            <span>Keep Screen On During Focus</span>
+            <input type="checkbox" id="toggle-wake" checked style="accent-color:var(--accent-mint); width:18px; height:18px;">
+          </label>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <button id="btn-load-demo-data" class="dialog-btn-secondary" style="width:100%; text-align:center;">
+            🌿 Populate Sample Forest Garden
+          </button>
+          <button id="btn-reset-data" style="background:transparent; border:1px solid rgba(230,57,70,0.3); color:var(--accent-danger); padding:10px; border-radius:var(--radius-pill); font-size:0.82rem; font-weight:600;">
+            Reset All Data & Progress
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="audio.js"></script>
+  <script src="trees.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

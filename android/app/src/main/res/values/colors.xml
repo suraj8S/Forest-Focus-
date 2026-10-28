@@ -1,0 +1,7 @@
+<resources>
+    <color name="colorPrimary">#2D6A4F</color>
+    <color name="colorPrimaryDark">#1B4332</color>
+    <color name="colorAccent">#52B788</color>
+    <color name="statusBarColor">#1B4332</color>
+    <color name="windowBackground">#0B1B13</color>
+</resources>
